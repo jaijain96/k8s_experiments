@@ -1,0 +1,163 @@
+  158  kubectl config view
+  159  kubectl config set-context cpu-example --cluster=minikube --user=minikube --namespace=cpu-example
+  160  kubectl config view
+  161  kubectl config delete-context mem-example
+  162  kubectl config view
+  163  kubectl config use-context cpu-example
+  164  kubectl get current-context
+  165  kubectl config current-context
+  166  kubectl get ns
+  167  kubectl apply -f cpu-request-limit.yaml 
+  168  kubectl get pod
+  169  kubectl get pod -w
+  170  kubectl logs -f cpu-demo
+  171  kubectl describe cpu-demo
+  172  kubectl describe pod cpu-demo
+  173  kubectl describe pod cpu-demo | grep container
+  174  kubectl logs -f cpu-demo -c cpu-demo-ctr
+  176  kubectl delete pod cpu-demo
+  189  kubectl get ns
+  190  kubectl config view
+  191  kubectl config delete-context cpu-example
+  192  kubectl get ns
+  193  kubectl config use-context minikube
+  194  kubectl config use-context default
+  195  kubectl config use-context minikube
+  196  kubectl get ns
+  197  kubectl delete ns cpu-example
+  198  kubectl create ns qos-example
+  199  kubectl apply -f qos-pod-5.yaml -ns=qos-example
+  200  kubectl apply -f qos-pod-5.yaml --ns=qos-example
+  201  kubectl apply -f qos-pod-5.yaml --namespace=qos-example
+  202  kubectl get pod
+  203  kubectl get pod -ns=qos-example
+  204  kubectl get pod -namespace=qos-example
+  205  kubectl get pod --namespace=qos-example
+  206  kubectl logs -f qos-demo
+  207  kubectl logs -f qos-demo --namespace=qos-example
+  208  kubectl logs -f qos-demo-5
+  209  kubectl logs -f qos-demo-5 --namespace=qos-example
+  210  kubectl describe pod 
+  211  kubectl describe pod --namespace=qos-example
+  212  kubectl describe pod qos-demo-5 --namespace=qos-example
+  213  kubectl -n qos-example patch pod qos-demo-5 --patch '{"spec":{"containers":[{"name":"qos-demo-ctr-5", "resources":{"requests":{"cpu":"800m"}, "limits":{"cpu":"800m"}}}]}}'
+  214  kubectl --namespace qos-example patch pod qos-demo-5 --patch '{"spec":{"containers":[{"name":"qos-demo-ctr-5", "resources":{"requests":{"cpu":"800m"}, "limits":{"cpu":"800m"}}}]}}'
+  215  kubectl describe pod qos-demo-5 --namespace=qos-example
+  216  kubectl get pod --namespace=qos-example
+  217  kubectl delete pod qos-demo-5
+  218  kubectl delete pod qos-demo-5 -n qos-example
+  220  kubectl apply -f qos-pod-5.yaml -n=qos-example
+  221  kubectl get pod -n qos-example
+  222  kubectl -n qos-example patch pod qos-demo-5 --patch '{"spec":{"containers":[{"name":"qos-demo-ctr-5", "resources":{"requests":{"cpu":"800m"}, "limits":{"cpu":"800m"}}}]}}'
+  223  kubectl get pod qos-demo-5 -n qos-example
+  224  kubectl get pod qos-demo-5 -n qos-example -o wide
+  225  kubectl get pod qos-demo-5 -n qos-example -o yaml
+  226  kubectl get pod qos-demo-5 -n qos-example -o yaml | grep restart
+  227  kubectl delete pod qos-demo-5 -n qos-example
+  228  kubectl apply -f qos-pod-5.yaml -n qos-example
+  229  kubectl get pod -n qos-example
+  230  kubectl describe pod qos-demo-5 -n qos-example
+  231  kubectl describe pod -n qos-example
+  232  kubectl get pod qos-demo-5 -n qos-example -o yaml
+  234  kubectl delete pod qos-demo-5 -n qos-example
+  235  kubectl get pod qos-demo-5 -n qos-example
+  236  kubectl get pod -n qos-example
+  237  kubectl get deployment -n qos-example
+  238  kubectl apply -f qos-pod-5.yaml -n qos-example
+  239  kubectl get pod qos-demo-5
+  240  kubectl get pod qos-pod-5
+  241  kubectl get pod qos-pod
+  242  kubectl -n qos-example get pod qos-demo-5
+  243  kubectl -n qos-example get pod qos-demo-5 -o wide
+  244  kubectl -n qos-example get pod qos-demo-5 -o yaml
+  245  kubectl -n qos-example patch pod qos-demo-5 --patch '{"spec":{"containers":[{"name":"qos-demo-ctr-5", "resources":{"requests":{"cpu":"800m"}, "limits":{"cpu":"800m"}}}]}}'
+  246  kubectl -n qos-example delete pod qos-demo-5
+  247  kubectl delete ns qos-example
+  248  kubectl delete n qos-example
+  249  kubectl get ns
+  496  kubectl get ns
+  497  kubectl get ns -o=yaml
+  498  history | grep kubectl
+  504  history | grep kubectl
+  505  kubectl context view
+  506  kubectl config view
+  507  history | grep kubectl
+  510  history | grep kubectl > history.txt
+  512  kubectl version
+  518  history | grep kubectl
+  530  kubectl apply -f redis.yaml
+  531  kubectl get pods
+  532  kubectl get pods
+  533  watch -n 1 kubectl get pods
+  534  kubectl get pods
+  535  kubectl get pods redis
+  536  kubectl get pods redis --watch
+  537  kubectl exec -it redis /bin/bash
+  538  kubectl exec redis -- /bin/bash
+  539  kubectl exec redis -it -- /bin/bash
+  540  kubectl exec -t redis -- /bin/bash
+  541  kubectl exec -it redis -- /bin/bash
+  542  kubectl get pods
+  543  kubectl get pods --watch
+  545  kubectl exec -it redis -- /bin/bash
+  547  kubectl get pod
+  548  kubectl delete pod
+  549  kubectl delete pod redis
+  550  kubectl get pods
+  559  kubectl apply -f pv-volume.yaml
+  560  kubectl get pods
+  562  kubectl get volumes
+  563  kubectl get volume
+  565  kubectl get pv
+  566  kubectl get persistentvolume
+  567  kubectl get persistentvolume --watch
+  568  kubectl get persistentvolume
+  571  kubectl apply -f pv-claim.yaml
+  572  kubectl get persistentvolume
+  573  kubectl get persistentvolume --watch
+  574  kubectl get persistentvolume --watch
+  581  watch -n 1 kubectl get persistentvolume
+  582  kubectl get persistentvolumeclaim
+  583  kubectl get pvc
+  584  kubectl get pvc task-pv-claim
+  585  kubectl get pvc task-pv-claim -o=yaml
+  586  kubectl describe pvc task-pv-claim -o=yaml
+  587  kubectl describe pvc task-pv-claim
+  590  kubectl apply -f pv-pod.yaml
+  591  kubectl get pods
+  592  kubectl get pod task-pv-pod -output=yaml
+  593  kubectl get pod task-pv-pod --output=yaml
+  594  kubectl get pod task-pv-pod -o=yaml
+  595  kubectl get pod task-pv-pod --watch
+  596  kubectl exec -it task-pv-pod -- /bin/bash
+  597  kubectl get pods
+  598  kubectl get pod
+  599  kubectl delete pod task-pv-pod
+  600  kubectl get pod
+  601  kubectl apply -f pv-pod.yaml
+  602  kubectl get pod --watch
+  603  kubectl exec -it task-pv-pod -- bash
+  604  kubectl exec -it task-pv-pod -- bash
+  605  kubectl get pod
+  606  kubectl delete pod task-pv-pod
+  607  kubectl get pod
+  608  kubectl get deployment
+  609  kubectl get service
+  610  kubectl get node
+  612  kubectl get pod
+  635  kubectl create configmap game-config --from-file=configure-pod-container/configmap/
+  636  kubectl get configmap
+  637  kubectl get cm
+  638  kubectl get configmap game-config
+  639  kubectl get configmap game-config -o=yaml
+  640  kubectl describe configmap game-config
+  643  kubectl get configmap game-config -o=yaml
+  644  kubectl get configmap
+  645  kubectl delete configmap game-config
+  646  kubectl get configmap
+  647  kubectl get configmap
+  648  kubectl get configmap
+  652  mv history.txt kubectl_commands_history.txt
+  653  cat kubectl_commands_history.txt 
+  656  history | grep kubectl
+  657  history | grep kubectl > kubectl_commands_history.txt
