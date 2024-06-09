@@ -1,4 +1,4 @@
-# Kubernetes Components
+# [Kubernetes Components](https://kubernetes.io/docs/concepts/overview/components/)
 
 ![](images/components-of-kubernetes.svg)
 

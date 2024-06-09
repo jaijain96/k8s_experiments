@@ -1,4 +1,4 @@
-# Nodes
+# [Nodes](https://kubernetes.io/docs/concepts/architecture/nodes/)
 
 Kubernetes runs our workload by placing `Container`s in `Pod`s that run on
 `Node`s, which can be a physical or virtual machine. Each `Node` is managed by
@@ -71,7 +71,7 @@ includes all `Container`s managed by the `kubelet`, but excludes any
 `Container`s started directly by the `Container` runtime, and also excludes
 any processes running outside of the `kubelet`'s control.
 
-## Communication between `Node`s and the `Control Plane`
+## [Communication between `Node`s and the `Control Plane`](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/)
 
 ### `Node` to `Control Plane`
 
@@ -83,5 +83,46 @@ the API server, i.e, if 2 `Controller`s need to communicate, they have to do
 so via the API server and not directly between themselves, what about the
 controller and the `Container`s?**
 
+The `Node`s and the `Pod`s within those use TLS to communicate with the API
+server and as such, the default operating mode for connections from the
+`Node`s and `Pod`s running on the them to the `Control Plane` is secured by
+default and can run over untrusted and/or public networks. There would be some
+configuration needed, checkout the official [doc](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#node-to-control-plane) for this section to get more info.
 
+### `Contol Plane` to `Node`
+
+There are two primary communication paths from the `Control Plane` (the 
+API server) to the `Node`s:
+1. From the API server to the `kubelet` process which runs on each `Node` in
+   the cluster.
+2. From the API server to any `Node`, `Pod`, or `Service` through the API
+   server's proxy functionality.
+
+#### API Server to `kubelet`
+
+The connections from the API server to the `kubelet` are used for:
+1. Fetching logs for `Pod`s.
+2. Attaching (usually through `kubectl`) to running `Pod`s.
+3. Providing the `kubelet`'s port-forwarding functionality.
+
+These connections terminate at the `kubelet`'s HTTPS endpoint. By default, the
+API server does not verify the `kubelet`'s serving certificate, which makes the
+connection subject to man-in-the-middle attacks and unsafe to run over
+untrusted and/or public networks. However, we can configure these connections
+to be secure, checkout the official [doc](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#control-plane-to-node) for this section to get more info.
+
+#### API server to `Node`s, `Pod`s, and `Service`s
+
+The connections from the API server to a `Node`, `Pod`, or `Service` default
+to plain HTTP connections and are therefore neither authenticated nor
+encrypted. They can be run over a secure HTTPS connection by prefixing
+`https:` to the `Node`, `Pod`, or `Service` name in the API URL, but they will
+not validate the certificate provided by the HTTPS endpoint nor provide client
+credentials. So while the connection will be encrypted, it will not provide any
+guarantees of integrity. These connections are not currently safe to run over
+untrusted or public networks.
+
+These connections can be made secure using [SSH Tunneling](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#ssh-tunnels)
+(deprecated) or via the [Konnectivity service](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#konnectivity-service), refer the
+official docs for more info.
 
