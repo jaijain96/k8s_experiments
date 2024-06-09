@@ -57,56 +57,58 @@ assigned `Node`, and selects a `Node` for them to run on.
 
 ### kube-controller-manager
 
-`Control Plane` component that runs controller processes. Logically, each
+`Control Plane` component that runs `Controller` processes. Logically, each
 `Controller` is a separate process, but to reduce complexity, they are all
 compiled into a single binary and run in a single process.
 
-There are many different types of controllers. Some examples of them are:
-1. `Node Controller`: Responsible for noticing and responding when nodes go
+There are many different types of `Controller`s. Some examples of them are:
+1. `Node` `Controller`: Responsible for noticing and responding when nodes go
    down.
-2. `Job Controller`: Watches for `Job` objects that represent one-off tasks,
+2. `Job` `Controller`: Watches for `Job` objects that represent one-off tasks,
    then creates `Pod`s to run those tasks to completion.
-3. `EndpointSlice Controller`: Populates `EndpointSlice` objects (to provide a
+3. `EndpointSlice` `Controller`: Populates `EndpointSlice` objects (to provide a
    link between `Service`s and `Pod`s).
 4. `ServiceAccount Controller`: Create default `ServiceAccounts` for new
    `Namespace`s.
 
 The above is not an exhaustive list.
 
-### cloud-controller-manager
+### `cloud-controller-manager`
 
 This `Contol Plane` component embeds cloud-specific control logic, by helping
 us link our cluster into our cloud provider's API and separates out the
 components that interact with that cloud platform from components that only
-interact with our cluster. This controller only runs controllers that are
+interact with our cluster. This `Controller` only runs `Controller`s that are
 specific to our cloud provider and if we are running a cluster on our
 on-premise cluster or any environment other than a cloud provider, the
 `cloud-controller-manager` will not be present in our cluster.
 
-The following controllers can have cloud provider dependencies:
-1. `Node Controller`: For checking the cloud provider to determine if a `Node`
+The following `Controller`s can have cloud provider dependencies:
+1. `Node` `Controller`: For checking the cloud provider to determine if a `Node`
    has been deleted in the cloud after it stops responding.
-2. `Route Controller`: For setting up routes in the underlying cloud
+2. `Route` `Controller`: For setting up routes in the underlying cloud
    infrastructure.
-3. `Service Controller`: For creating, updating and deleting cloud provider
+3. `Service` `Controller`: For creating, updating and deleting cloud provider
    load balancers.
 
-## Node Components
+Refer the [`cloud-controller-manager`](https://kubernetes.io/docs/concepts/architecture/cloud-controller/) doc for more info.
 
-Node components run on every node, maintaining running pods and providing the
-Kubernetes runtime environment.
+## `Node` Components
 
-### kubelet
+`Node` components run on every `Node`, maintaining running `Pod`s and providing
+the Kubernetes runtime environment.
 
-Runs on each `Node` in the cluster, it makes sure that containers are running
+### `kubelet`
+
+Runs on each `Node` in the cluster, it makes sure that `Container`s are running
 in a `Pod`.
 
 The `kubelet` takes a set of `PodSpec`s that are provided through various
-mechanisms and ensures that the containers described in those `PodSpec`s are
-running and healthy. The `kubelet` doesn't manage containers which were not
+mechanisms and ensures that the `Container`s described in those `PodSpec`s are
+running and healthy. The `kubelet` doesn't manage `Container`s which were not
 created by Kubernetes.
 
-### kube-proxy
+### `kube-proxy`
 
 `kube-proxy` is a network proxy that runs on each `Node` in our cluster,
 implementing part of the Kubernetes `Service` concept.
@@ -115,14 +117,16 @@ implementing part of the Kubernetes `Service` concept.
 network communication to our `Pod`s from network sessions inside or outside
 of our cluster.
 
-### Container Runtime
+### `Container` Runtime
 
-A fundamental component that empowers Kubernetes to run containers effectively.
-It is responsible for managing the execution and lifecycle of containers within
-the Kubernetes environment.
+A fundamental component that empowers Kubernetes to run `Container`s
+effectively. It is responsible for managing the execution and lifecycle of
+`Container`s within the Kubernetes environment.
 
-Kubernetes supports container runtimes such as `containerd`, `CRI-O`, and any
-other implementation of the Kubernetes CRI (Container Runtime Interface).
+Kubernetes supports `Container` runtimes such as `containerd`, `CRI-O`, and any
+other implementation of the Kubernetes CRI (`Container` Runtime Interface).
+
+Refer the [`Container` Runtime Interface](https://kubernetes.io/docs/concepts/architecture/cri/) doc for more info.
 
 ## Addons
 
@@ -135,7 +139,7 @@ cluster features. Because these are providing cluster-level features,
 While the other addons are not strictly required, all Kubernetes clusters
 should have `Cluster DNS`, as many examples rely on it. `Cluster DNS` is a DNS
 server, in addition to the other DNS server(s) in your environment, which
-serves DNS records for Kubernetes services. Containers started by Kubernetes
+serves DNS records for Kubernetes services. `Container`s started by Kubernetes
 automatically include this DNS server in their DNS searches.
 **Doubt here: how is the `Cluster DNS` service implemented? Is it also running
 as a `Container` in a `Pod`? Are these deployed on various `Node`s in the
@@ -146,22 +150,20 @@ cluster?**
 Dashboard is a web-based UI that allows users to manage and troubleshoot
 applications running in the cluster, as well as the cluster itself.
 
-### Container Resource Monitoring
+### `Container` Resource Monitoring
 
-Container Resource Monitoring records generic time-series metrics about
-containers in a central database, and provides a UI for browsing that data.
+`Container` Resource Monitoring records generic time-series metrics about
+`Container`s in a central database, and provides a UI for browsing that data.
 
 ### Cluster-level Logging
 
-A cluster-level logging mechanism is responsible for saving container logs to
+A cluster-level logging mechanism is responsible for saving `Container` logs to
 a central log store with search/browsing interface.
 
 ### Network Plugins
 
-Network plugins are software components that implement the container network
+Network plugins are software components that implement the `Container` network
 interface (CNI) specification. They are responsible for allocating IP
 addresses to `Pod`s and enabling them to communicate with each other within the
 cluster.
-
-
 

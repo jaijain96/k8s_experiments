@@ -1,4 +1,4 @@
-# [Nodes](https://kubernetes.io/docs/concepts/architecture/nodes/)
+# [`Node`s](https://kubernetes.io/docs/concepts/architecture/nodes/)
 
 Kubernetes runs our workload by placing `Container`s in `Pod`s that run on
 `Node`s, which can be a physical or virtual machine. Each `Node` is managed by
