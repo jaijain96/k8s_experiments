@@ -9,6 +9,7 @@
    2. [`Controller`s](notes/controllers.md)
    3. [`Workload`s](notes/workloads.md)
       1. [`Pod`s](notes/pods.md)
+         1. [`Pod` Lifecycle](notes/pod_lifecycle.md)
    4.
 
 ## To Understand Later
