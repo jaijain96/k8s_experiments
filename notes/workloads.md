@@ -12,6 +12,7 @@ use `Workload` resources that manage a set of `Pod`s. These resources configure
 `Controller`s that make sure the right number of the right kind of `Pod` are
 running, to match the state we specified. Kubernetes provides several built-in
 `Workload` resources:
+
 1. `Deployment` and `ReplicaSet` (replacing the legacy resource
    `ReplicationController`): `Deployment` is a good fit for managing a
    stateless application workload on our cluster, where any `Pod` in the
@@ -34,4 +35,3 @@ running, to match the state we specified. Kubernetes provides several built-in
    completion and then stop. We can use a `Job` to define a task that runs to
    completion, just once. We can use a `CronJob` to run the same `Job` multiple
    times according a schedule.
-

@@ -7,11 +7,13 @@ components on a `Node` include the `kubelet`, a `Container` runtime, and the
 `kube-proxy`.
 
 There are two main ways to have `Node`s added to the API server:
+
 1. The `kubelet` on a node self-registers to the `Control Plane`.
 2. We (or another human user) manually add(s) a `Node` object to the API
    server.
 
 In either of the above cases:
+
 1. Kubernetes creates a `Node` object internally (the representation).
 2. The `Control Plane` checks whether the new `Node` object is valid, i.e, all
    necessary services to run a `Pod` are running on the `Node`.
@@ -23,7 +25,7 @@ In either of the above cases:
 The `metadata.name` field uniquely identifies a `Node`. Kubernetes also assumes
 that a resource with the same `name` is the same object. In case of a `Node`,
 it is implicitly assumed that an instance using the same `name` will have the
-same state (e.g. network settings, root disk contents) and `attributes` like 
+same state (e.g. network settings, root disk contents) and `attributes` like
 `Node` `Label`s. This may lead to inconsistencies if an instance was modified
 without changing its name. If the `Node` needs to be replaced or updated
 significantly, the existing `Node` object needs to be removed from API server
@@ -32,6 +34,7 @@ first and re-added after the update.
 ## Node Status
 
 We can use `kubectl` to view a `Node`'s status and other details:
+
 ```
 kubectl describe node <insert-node-name-here>
 ```
@@ -45,7 +48,8 @@ availability of each `Node`, and to take action when failures are detected.
 
 The `Node` `Controller` is a Kubernetes `Control Plane` component that manages
 various aspects of `Node`s:
-1. Assigning a CIDR block to the `Node` when it is registered (if CIDR 
+
+1. Assigning a CIDR block to the `Node` when it is registered (if CIDR
    assignment is turned on).
 2. Keeping the `Node` `Controller`'s internal list of `Node`s up to date with
    the cloud provider's list of available machines. When running in a cloud environment and whenever a `Node` is unhealthy, the `Node` `Controller` asks
@@ -91,8 +95,9 @@ configuration needed, checkout the official [doc](https://kubernetes.io/docs/con
 
 ### `Contol Plane` to `Node`
 
-There are two primary communication paths from the `Control Plane` (the 
+There are two primary communication paths from the `Control Plane` (the
 API server) to the `Node`s:
+
 1. From the API server to the `kubelet` process which runs on each `Node` in
    the cluster.
 2. From the API server to any `Node`, `Pod`, or `Service` through the API
@@ -101,6 +106,7 @@ API server) to the `Node`s:
 #### API Server to `kubelet`
 
 The connections from the API server to the `kubelet` are used for:
+
 1. Fetching logs for `Pod`s.
 2. Attaching (usually through `kubectl`) to running `Pod`s.
 3. Providing the `kubelet`'s port-forwarding functionality.
@@ -125,4 +131,3 @@ untrusted or public networks.
 These connections can be made secure using [SSH Tunneling](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#ssh-tunnels)
 (deprecated) or via the [Konnectivity service](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#konnectivity-service), refer the
 official docs for more info.
-

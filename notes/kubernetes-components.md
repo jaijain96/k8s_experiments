@@ -1,6 +1,6 @@
 # [Kubernetes Components](https://kubernetes.io/docs/concepts/overview/components/)
 
-![](images/components-of-kubernetes.svg)
+![components-of-kubernetes](images/components-of-kubernetes.svg)
 
 We deploy Kubernetes on a set of interconnected machines (or virtual
 machines), on doing so, we get a cluster.
@@ -62,6 +62,7 @@ assigned `Node`, and selects a `Node` for them to run on.
 compiled into a single binary and run in a single process.
 
 There are many different types of `Controller`s. Some examples of them are:
+
 1. `Node` `Controller`: Responsible for noticing and responding when nodes go
    down.
 2. `Job` `Controller`: Watches for `Job` objects that represent one-off tasks,
@@ -84,6 +85,7 @@ on-premise cluster or any environment other than a cloud provider, the
 `cloud-controller-manager` will not be present in our cluster.
 
 The following `Controller`s can have cloud provider dependencies:
+
 1. `Node` `Controller`: For checking the cloud provider to determine if a `Node`
    has been deleted in the cloud after it stops responding.
 2. `Route` `Controller`: For setting up routes in the underlying cloud
@@ -166,4 +168,3 @@ Network plugins are software components that implement the `Container` network
 interface (CNI) specification. They are responsible for allocating IP
 addresses to `Pod`s and enabling them to communicate with each other within the
 cluster.
-

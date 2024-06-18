@@ -9,6 +9,7 @@ Namespaces are intended for use in environments with many users spread across mu
 Namespaces cannot be nested inside one another and each Kubernetes resource can only be in one namespace.
 
 Kubernetes starts with 4 initial namespaces:
+
 1. default:
 Kubernetes includes this namespace so that you can start using your new cluster
 without first creating a namespace.
@@ -31,14 +32,14 @@ which is local to a namespace. To reach across namespaces, we need to specify
 the fully qualified domain name (FQDN).
 
 Not all objects are in a namespace, i.e, there are objects which aren't in any
-namespace. For instance, low-level resources such as `nodes` and 
+namespace. For instance, low-level resources such as `nodes` and
 `persistentVolumes` are not in any namespace. Namespace objects are themselves
 not in any namespace.
 
 To check which API resources are in a namespace (and which aren't), use:
 
 `kubectl api-resources --namespaced=true`
-`kubectl api-resources --namespaced=false` 
+`kubectl api-resources --namespaced=false`
 
 ## [Annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 
@@ -54,6 +55,7 @@ structured or unstructured, and can include characters not permitted by
 metadata of the same object.
 
 Here are some examples of information that could be recorded in annotations:
+
 1. Fields managed by a declarative configuration layer. Attaching these fields
 as annotations distinguishes them from default values set by clients or
 servers, and from auto-generated fields and fields set by auto-sizing or
@@ -75,6 +77,7 @@ engage non-standard features.
 
 Field selectors let us select Kubernetes objects based on the value of one or
 more resource fields. Here are some examples of field selector queries:
+
 ```
 metadata.name=my-service
 metadata.namespace!=default
@@ -88,9 +91,11 @@ Field selectors are essentially resource filters.
 You can use the `=`, `==`, and `!=` operators with field selectors
 (`=` and `==` mean the same thing). This kubectl command, for example, selects
 all Kubernetes Services that aren't in the default namespace:
+
 ```
 kubectl get services  --all-namespaces --field-selector metadata.namespace!=default
 ```
+
 Set-based operators (`in`, `notin`, `exists`) are not supported for field
 selectors.
 
@@ -120,6 +125,7 @@ When we create a resource using a manifest file, you can specify finalizers in
 the `metadata.finalizers` field. When we attempt to delete the resource, the
 API server handling the delete request notices the values in the finalizers
 field and does the following:
+
 1. Modifies the object to add a `metadata.deletionTimestamp` field with the
 time at which we started the deletion.
 2. Prevents the object from being removed until all items are removed from its
@@ -187,6 +193,3 @@ happen immediately because the `PersistentVolume` has the
 `kubernetes.io/pv-protection` `Finalizer` on it. Instead, the volume remains
 in the `Terminating` status until Kubernetes clears the `Finalizer`, which
 only happens after the `PersistentVolume` is no longer bound to a `Pod`.
-
-
-

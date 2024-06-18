@@ -56,5 +56,3 @@ designed to allow for that.
 Kubernetes comes with a set of built-in `Controller`s that run inside the
 `kube-controller-manager`. These built-in `Controller`s provide important core
 behaviors.
-
-

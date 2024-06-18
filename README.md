@@ -9,10 +9,9 @@
    2. [`Controller`s](notes/controllers.md)
    3. [`Workload`s](notes/workloads.md)
       1. [`Pod`s]()
-   4. 
+   4.
 
 ## To Understand Later
 
 1. [`Lease`s](https://kubernetes.io/docs/concepts/architecture/leases/)
 2. [Garbage Collection](https://kubernetes.io/docs/concepts/architecture/garbage-collection/)
-
