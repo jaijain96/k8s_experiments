@@ -57,28 +57,28 @@ metadata of the same object.
 Here are some examples of information that could be recorded in annotations:
 
 1. Fields managed by a declarative configuration layer. Attaching these fields
-as annotations distinguishes them from default values set by clients or
-servers, and from auto-generated fields and fields set by auto-sizing or
-auto-scaling systems.
+   as annotations distinguishes them from default values set by clients or
+   servers, and from auto-generated fields and fields set by auto-sizing or
+   auto-scaling systems.
 2. Build, release, or image information like timestamps, release IDs,
-git branch, PR numbers, image hashes, and registry address.
+   git branch, PR numbers, image hashes, and registry address.
 3. Pointers to logging, monitoring, analytics, or audit repositories.
 4. Client library or tool information that can be used for debugging purposes,
-for example, name, version, and build information.
+   for example, name, version, and build information.
 5. User or tool/system provenance information, such as URLs of related objects
-from other ecosystem components.
+   from other ecosystem components.
 6. Lightweight rollout tool metadata: for example, config or checkpoints.
 7. Phone or pager numbers of persons responsible, or directory entries that
-specify where that information can be found, such as a team web site.
+   specify where that information can be found, such as a team web site.
 8. Directives from the end-user to the implementations to modify behavior or
-engage non-standard features.
+   engage non-standard features.
 
 ## [Field Selectors](https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/)
 
 Field selectors let us select Kubernetes objects based on the value of one or
 more resource fields. Here are some examples of field selector queries:
 
-```
+```bash
 metadata.name=my-service
 metadata.namespace!=default
 status.phase=Pending
@@ -92,7 +92,7 @@ You can use the `=`, `==`, and `!=` operators with field selectors
 (`=` and `==` mean the same thing). This kubectl command, for example, selects
 all Kubernetes Services that aren't in the default namespace:
 
-```
+```bash
 kubectl get services  --all-namespaces --field-selector metadata.namespace!=default
 ```
 
@@ -127,13 +127,14 @@ API server handling the delete request notices the values in the finalizers
 field and does the following:
 
 1. Modifies the object to add a `metadata.deletionTimestamp` field with the
-time at which we started the deletion.
+   time at which we started the deletion.
 2. Prevents the object from being removed until all items are removed from its
-`metadata.finalizers` field.
+   `metadata.finalizers` field.
 3. Returns a `202` status code (HTTP `Accepted`).
 
 The `Controller` managing that `Finalizer` notices the update to the object
-setting the `metadata.deletionTimestamp`, indicating deletion of the object has been requested. The `Controller` then attempts to satisfy the requirements of
+setting the `metadata.deletionTimestamp`, indicating deletion of the object has
+been requested. The `Controller` then attempts to satisfy the requirements of
 the `Finalizer`s specified for that resource. Each time a `Finalizer` condition
 is satisfied, the `Controller` removes that key from the resource's
 `Finalizer`s field. When the `Finalizer`s field is emptied, an object with a

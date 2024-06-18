@@ -35,7 +35,7 @@ first and re-added after the update.
 
 We can use `kubectl` to view a `Node`'s status and other details:
 
-```
+```bash
 kubectl describe node <insert-node-name-here>
 ```
 
@@ -52,7 +52,8 @@ various aspects of `Node`s:
 1. Assigning a CIDR block to the `Node` when it is registered (if CIDR
    assignment is turned on).
 2. Keeping the `Node` `Controller`'s internal list of `Node`s up to date with
-   the cloud provider's list of available machines. When running in a cloud environment and whenever a `Node` is unhealthy, the `Node` `Controller` asks
+   the cloud provider's list of available machines. When running in a cloud
+   environment and whenever a `Node` is unhealthy, the `Node` `Controller` asks
    the cloud provider if the VM for that `Node` is still available. If not, the
    `Node` `Controller` deletes the `Node` from its list of nodes.
 3. Monitoring the `Node`s' health.
@@ -90,8 +91,9 @@ controller and the `Container`s?**
 The `Node`s and the `Pod`s within those use TLS to communicate with the API
 server and as such, the default operating mode for connections from the
 `Node`s and `Pod`s running on the them to the `Control Plane` is secured by
-default and can run over untrusted and/or public networks. There would be some
-configuration needed, checkout the official [doc](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#node-to-control-plane) for this section to get more info.
+default and can run over untrusted and/or public networks. However, there would
+be some configuration needed, checkout the official [doc](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#node-to-control-plane) for this section to
+get more info.
 
 ### `Contol Plane` to `Node`
 

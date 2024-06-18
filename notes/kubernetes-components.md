@@ -29,9 +29,9 @@ that run on separate containers deployed on various nodes in the cluster?**
 
 ### kube-apiserver
 
-The API server is a component of the Kubernetes control plane that exposes the
-Kubernetes API. The API server is the frontend for the Kubernetes control
-plane.
+The API server is a component of the Kubernetes `Control Plane` that exposes
+the Kubernetes API. The API server is the frontend for the Kubernetes
+`Control Plane`.
 
 The main implementation of a Kubernetes API server is `kube-apiserver`.
 `kube-apiserver` is designed to scale horizontally — that is, it scales by
@@ -93,7 +93,8 @@ The following `Controller`s can have cloud provider dependencies:
 3. `Service` `Controller`: For creating, updating and deleting cloud provider
    load balancers.
 
-Refer the [`cloud-controller-manager`](https://kubernetes.io/docs/concepts/architecture/cloud-controller/) doc for more info.
+Refer the [`cloud-controller-manager`](https://kubernetes.io/docs/concepts/architecture/cloud-controller/)
+doc for more info.
 
 ## `Node` Components
 
@@ -128,7 +129,8 @@ effectively. It is responsible for managing the execution and lifecycle of
 Kubernetes supports `Container` runtimes such as `containerd`, `CRI-O`, and any
 other implementation of the Kubernetes CRI (`Container` Runtime Interface).
 
-Refer the [`Container` Runtime Interface](https://kubernetes.io/docs/concepts/architecture/cri/) doc for more info.
+Refer the [`Container` Runtime Interface](https://kubernetes.io/docs/concepts/architecture/cri/)
+doc for more info.
 
 ## Addons
 

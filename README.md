@@ -8,7 +8,7 @@
    1. [`Node`s](notes/nodes.md)
    2. [`Controller`s](notes/controllers.md)
    3. [`Workload`s](notes/workloads.md)
-      1. [`Pod`s]()
+      1. [`Pod`s](notes/pods.md)
    4.
 
 ## To Understand Later
