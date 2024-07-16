@@ -44,9 +44,9 @@ kubectl describe node <insert-node-name-here>
 `Heartbeat`s, sent by Kubernetes `Node`s, help our cluster determine the
 availability of each `Node`, and to take action when failures are detected.
 
-## `Node` `Controller`
+## `Node Controller`
 
-The `Node` `Controller` is a Kubernetes `Control Plane` component that manages
+The `Node Controller` is a Kubernetes `Control Plane` component that manages
 various aspects of `Node`s:
 
 1. Assigning a CIDR block to the `Node` when it is registered (if CIDR
@@ -92,8 +92,7 @@ The `Node`s and the `Pod`s within those use TLS to communicate with the API
 server and as such, the default operating mode for connections from the
 `Node`s and `Pod`s running on the them to the `Control Plane` is secured by
 default and can run over untrusted and/or public networks. However, there would
-be some configuration needed, checkout the official [doc](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#node-to-control-plane) for this section to
-get more info.
+be some configuration needed, checkout the official [doc](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#node-to-control-plane) for this section to get more info.
 
 ### `Contol Plane` to `Node`
 
@@ -131,5 +130,4 @@ guarantees of integrity. These connections are not currently safe to run over
 untrusted or public networks.
 
 These connections can be made secure using [SSH Tunneling](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#ssh-tunnels)
-(deprecated) or via the [Konnectivity service](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#konnectivity-service), refer the
-official docs for more info.
+(deprecated) or via the [Konnectivity service](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#konnectivity-service), refer the official docs for more info.

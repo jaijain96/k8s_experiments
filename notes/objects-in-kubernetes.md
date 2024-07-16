@@ -2,41 +2,45 @@
 
 ## [Namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)
 
-In Kubernetes, namespaces provide a mechanism for isolating groups of resources within a single cluster. Names of resources need to be unique within a namespace, but not across namespaces. Namespace-based scoping is applicable only for namespaced objects (e.g. Deployments, Services, etc.) and not for cluster-wide objects (e.g. StorageClass, Nodes, PersistentVolumes, etc.).
+In Kubernetes, `Namespace`s provide a mechanism for isolating groups of
+resources within a single cluster. Names of resources need to be unique within
+a `Namespace`, but not across `Namespace`s. `Namespace`-based scoping is
+applicable only for `Namespace`d objects (e.g. `Deployment`s, `Service`s,
+etc.) and not for cluster-wide objects (e.g. `StorageClass`, `Nodes`,
+`PersistentVolumes`, etc.).
 
-Namespaces are intended for use in environments with many users spread across multiple teams, or projects.
+`Namespace`s are intended for use in environments with many users spread across
+multiple teams, or projects.
 
-Namespaces cannot be nested inside one another and each Kubernetes resource can only be in one namespace.
+`Namespace`s cannot be nested inside one another and each Kubernetes resource
+can only be in one `Namespace`.
 
-Kubernetes starts with 4 initial namespaces:
+Kubernetes starts with 4 initial `Namespace`s:
 
-1. default:
-Kubernetes includes this namespace so that you can start using your new cluster
-without first creating a namespace.
-2. kube-node-lease:
-This namespace holds Lease objects associated with each node. Node leases allow
-the kubelet to send heartbeats so that the control plane can detect node
-failure.
-3. kube-public:
-This namespace is readable by all clients (including those not authenticated).
-This namespace is mostly reserved for cluster usage, in case that some
-resources should be visible and readable publicly throughout the whole cluster.
-The public aspect of this namespace is only a convention, not a requirement.
-4. kube-system:
-The namespace for objects created by the Kubernetes system.
+1. default: Kubernetes includes this `Namespace` so that you can start using
+   your new cluster without first creating a `Namespace`.
+2. kube-node-lease: This `Namespace` holds `Lease` objects associated with each
+   `Node`. `Node` leases allow the `kubelet` to send heartbeats so that the
+   `Control Plane` can detect `Node` failure.
+3. kube-public: This `Namespace` is readable by all clients (including those
+   not authenticated). This `Namespace` is mostly reserved for cluster usage,
+   in case that some resources should be visible and readable publicly
+   throughout the whole cluster. The public aspect of this `Namespace` is only
+   a convention, not a requirement.
+4. kube-system: The `Namespace` for objects created by the Kubernetes system.
 
-When we create a k8s Service, it creates a corresponding DNS entry. This entry
-is of the form `<service-name>.<namespace-name>.svc.cluster.local`, which means
-that if a container only uses `<service_name>` it would resolve to the service
-which is local to a namespace. To reach across namespaces, we need to specify
-the fully qualified domain name (FQDN).
+When we create a k8s `Service`, it creates a corresponding DNS entry. This
+entry is of the form `<service-name>.<namespace-name>.svc.cluster.local`, which
+means that if a `Container` only uses `<service_name>` it would resolve to the
+`Service` which is local to a `Namespace`. To reach across `Namespace`s, we
+need to specify the fully qualified domain name (FQDN).
 
-Not all objects are in a namespace, i.e, there are objects which aren't in any
-namespace. For instance, low-level resources such as `nodes` and
-`persistentVolumes` are not in any namespace. Namespace objects are themselves
-not in any namespace.
+Not all objects are in a `Namespace`, i.e, there are objects which aren't in
+any `Namespace`. For instance, low-level resources such as `Nodes` and
+`persistentVolumes` are not in any `Namespace`. `Namespace` objects are
+themselves not in any `Namespace`.
 
-To check which API resources are in a namespace (and which aren't), use:
+To check which API resources are in a `Namespace` (and which aren't), use:
 
 `kubectl api-resources --namespaced=true`
 `kubectl api-resources --namespaced=false`
@@ -54,10 +58,10 @@ structured or unstructured, and can include characters not permitted by
 `Label`s. It is possible to use `Label`s as well as `Annotation`s in the
 metadata of the same object.
 
-Here are some examples of information that could be recorded in annotations:
+Here are some examples of information that could be recorded in `Annotation`s:
 
 1. Fields managed by a declarative configuration layer. Attaching these fields
-   as annotations distinguishes them from default values set by clients or
+   as `Annotation`s distinguishes them from default values set by clients or
    servers, and from auto-generated fields and fields set by auto-sizing or
    auto-scaling systems.
 2. Build, release, or image information like timestamps, release IDs,
@@ -75,7 +79,7 @@ Here are some examples of information that could be recorded in annotations:
 
 ## [Field Selectors](https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/)
 
-Field selectors let us select Kubernetes objects based on the value of one or
+`Field Selector`s let us select Kubernetes objects based on the value of one or
 more resource fields. Here are some examples of field selector queries:
 
 ```bash
@@ -86,44 +90,45 @@ status.phase=Pending
 kubectl get pods --field-selector status.phase=Running
 ```
 
-Field selectors are essentially resource filters.
+`Field selector`s are essentially resource filters.
 
-You can use the `=`, `==`, and `!=` operators with field selectors
-(`=` and `==` mean the same thing). This kubectl command, for example, selects
-all Kubernetes Services that aren't in the default namespace:
+You can use the `=`, `==`, and `!=` operators with `Field Selector`s
+(`=` and `==` mean the same thing). This `kubectl` command, for example,
+selects all Kubernetes `Service`s that aren't in the default `Namespace`:
 
 ```bash
 kubectl get services  --all-namespaces --field-selector metadata.namespace!=default
 ```
 
-Set-based operators (`in`, `notin`, `exists`) are not supported for field
-selectors.
+Set-based operators (`in`, `notin`, `exists`) are not supported for
+`Field Selector`s.
 
 **Doubt here: where to use `Label`s, where to use `Annotation`s and where to
 use `Field Selector`s.**
 
 ## [Finalizers](https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers/)
 
-Finalizers are namespaced keys that tell Kubernetes to wait until specific
+`Finalizer`s are `Namespace`d keys that tell Kubernetes to wait until specific
 conditions are met before it fully deletes resources marked for deletion.
-Finalizers alert controllers to clean up resources the deleted object owned.
+`Finalizer`s alert `Controller`s to clean up resources the deleted object
+owned.
 
-We can use finalizers to control garbage collection of resources. For example,
-we can define a finalizer to clean up related resources or infrastructure before
-the controller deletes the target resource.
+We can use `Finalizer`s to control garbage collection of resources. For
+example, we can define a `Finalizer` to clean up related resources or
+infrastructure before the `Controller` deletes the target resource.
 
-We can use finalizers to control garbage collection of objects by alerting
-controllers to perform specific cleanup tasks before deleting the target
+We can use `Finalizer`s to control garbage collection of objects by alerting
+`Controller`s to perform specific cleanup tasks before deleting the target
 resource.
 
-Finalizers don't usually specify the code to execute. Instead, they are
-typically lists of keys on a specific resource similar to annotations.
-Kubernetes specifies some finalizers automatically, but we can also specify our
-own.
+`Finalizer`s don't usually specify the code to execute. Instead, they are
+typically lists of keys on a specific resource similar to `Annotation`s.
+Kubernetes specifies some `Finalizer`s automatically, but we can also specify
+our own.
 
-When we create a resource using a manifest file, you can specify finalizers in
-the `metadata.finalizers` field. When we attempt to delete the resource, the
-API server handling the delete request notices the values in the finalizers
+When we create a resource using a manifest file, you can specify `Finalizer`s
+in the `metadata.finalizers` field. When we attempt to delete the resource, the
+API server handling the delete request notices the values in the `Finalizer`s
 field and does the following:
 
 1. Modifies the object to add a `metadata.deletionTimestamp` field with the

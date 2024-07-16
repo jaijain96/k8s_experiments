@@ -15,7 +15,7 @@ cluster. In production environments, the `Control Plane` usually runs across
 multiple computers and a cluster usually runs multiple `Node`s, providing
 fault-tolerance and high availability.
 
-## Control Plane Components
+## `Control Plane` Components
 
 The `Control Plane`'s components make global decisions about the cluster
 (for example, scheduling), as well as detecting and responding to cluster
@@ -23,9 +23,9 @@ events (for example, starting up a new `Pod` when a `Deployment`'s `replicas`
 field is unsatisfied).
 
 `Control Plane` components can be run on any machine in the cluster and span
-multiple machines in the cluster. **Doubt here: is the control plane also
-running as a container? are their different components in the control plane
-that run on separate containers deployed on various nodes in the cluster?**
+multiple machines in the cluster. **Doubt here: is the `Control Plane` also
+running as a `Container`? Are their different components in the `Control Plane`
+that run on separate `Container`s deployed on various nodes in the cluster?**
 
 ### kube-apiserver
 
@@ -44,8 +44,8 @@ instances mentioned here mean containers?**
 `etcd` is a consistent and highly-available key value store used as
 Kubernetes' backing store for all cluster data.
 
-If our Kubernetes cluster uses etcd as its backing store, we need to make sure
-we have a back up plan for the data. Why? As stated above, `etcd` is
+If our Kubernetes cluster uses `etcd` as its backing store, we need to make
+sure we have a back up plan for the data. Why? As stated above, `etcd` is
 consistent and highly avaialable, which according to CAP theorem, makes it
 non-partition tolerant. Therefore, we need a backup plan for `etcd` data, to
 save us in case of system faults.
@@ -63,11 +63,11 @@ compiled into a single binary and run in a single process.
 
 There are many different types of `Controller`s. Some examples of them are:
 
-1. `Node` `Controller`: Responsible for noticing and responding when nodes go
+1. `Node Controller`: Responsible for noticing and responding when nodes go
    down.
-2. `Job` `Controller`: Watches for `Job` objects that represent one-off tasks,
+2. `Job Controller`: Watches for `Job` objects that represent one-off tasks,
    then creates `Pod`s to run those tasks to completion.
-3. `EndpointSlice` `Controller`: Populates `EndpointSlice` objects (to provide a
+3. `EndpointSlice Controller`: Populates `EndpointSlice` objects (to provide a
    link between `Service`s and `Pod`s).
 4. `ServiceAccount Controller`: Create default `ServiceAccounts` for new
    `Namespace`s.
@@ -86,11 +86,11 @@ on-premise cluster or any environment other than a cloud provider, the
 
 The following `Controller`s can have cloud provider dependencies:
 
-1. `Node` `Controller`: For checking the cloud provider to determine if a `Node`
+1. `Node Controller`: For checking the cloud provider to determine if a `Node`
    has been deleted in the cloud after it stops responding.
-2. `Route` `Controller`: For setting up routes in the underlying cloud
+2. `Route Controller`: For setting up routes in the underlying cloud
    infrastructure.
-3. `Service` `Controller`: For creating, updating and deleting cloud provider
+3. `Service Controller`: For creating, updating and deleting cloud provider
    load balancers.
 
 Refer the [`cloud-controller-manager`](https://kubernetes.io/docs/concepts/architecture/cloud-controller/)
@@ -145,8 +145,8 @@ should have `Cluster DNS`, as many examples rely on it. `Cluster DNS` is a DNS
 server, in addition to the other DNS server(s) in your environment, which
 serves DNS records for Kubernetes services. `Container`s started by Kubernetes
 automatically include this DNS server in their DNS searches.
-**Doubt here: how is the `Cluster DNS` service implemented? Is it also running
-as a `Container` in a `Pod`? Are these deployed on various `Node`s in the
+**Doubt here: How is the `Cluster DNS` implemented? Is it also running as a
+`Container` in a `Pod`? Are these deployed on various `Node`s in the
 cluster?**
 
 ### Web UI (Dashboard)

@@ -23,25 +23,25 @@ filesystem volumes.
 
 `Pod`s in a Kubernetes cluster are used in two main ways:
 
-1. `Pod`s that run a single container: The "one-container-per-Pod" model is the
-   most common Kubernetes use case; we can think of a `Pod` as a wrapper around
-   a single `Container`; Kubernetes manages `Pod`s rather than managing the
-   containers directly.
+1. `Pod`s that run a single `Container`: The "one-container-per-Pod" model is
+   the most common Kubernetes use case; we can think of a `Pod` as a wrapper around a single `Container`; Kubernetes manages `Pod`s rather than managing
+   the containers directly.
 2. `Pod`s that run multiple `Container`s that need to work together. A `Pod`
    can encapsulate an application composed of multiple co-located `Container`s
    that are tightly coupled and need to share resources. These co-located
-   containers form a single cohesive unit.
+   `Container`s form a single cohesive unit.
 
-Usually we don't need to create `Pod`s directly, even singleton `Pod`s. Instead,
-we create them using `Workload` resources such as `Deployment` or `Job`. If our
-`Pod`s need to track state, we can use the `StatefulSet` resource. `Pod`s are
-designed as relatively ephemeral, disposable entities. When a `Pod` gets
-created (directly by us, or indirectly by a `Controller`), the new `Pod` is
-scheduled to run on a `Node` in your cluster. The `Pod` remains on that `Node`
-until the `Pod` finishes execution, the `Pod` object is deleted, the `Pod` is
-evicted for lack of resources, or the `Node` fails. Restarting a `Container` in
-a `Pod` should not be confused with restarting a `Pod`. <mark> A `Pod` is not a
-process, but an environment for running `Container`(s)</mark>. A `Pod` persists until it is deleted.
+Usually we don't need to create `Pod`s directly, even singleton `Pod`s.
+Instead, we create them using `Workload` resources such as `Deployment` or
+`Job`. If our `Pod`s need to track state, we can use the `StatefulSet`
+resource. `Pod`s are designed as relatively ephemeral, disposable entities.
+When a `Pod` gets created (directly by us, or indirectly by a `Controller`),
+the new `Pod` is scheduled to run on a `Node` in your cluster. The `Pod`
+remains on that `Node` until the `Pod` finishes execution, the `Pod` object is
+deleted, the `Pod` is evicted for lack of resources, or the `Node` fails.
+Restarting a `Container` in a `Pod` should not be confused with restarting a
+`Pod`. <mark> A `Pod` is not a process, but an environment for running
+`Container`(s)</mark>. A `Pod` persists until it is deleted.
 
 A `Controller` for the resource handles replication and rollout and automatic
 healing in case of `Pod` failure. For example, if a `Node` fails, a
@@ -78,7 +78,7 @@ survive in case one of the `Container`s within needs to be restarted.
 
 **Networking**: Each `Pod` is assigned a unique IP address for each address
 family. Every `Container` in a `Pod` shares the network namespace, including
-the IP address and network ports. Inside a `Pod` (and **only** then), the
+the IP address and network ports. Inside a `Pod` (**and only then**), the
 `Container`s that belong to the `Pod` can communicate with one another using
 `localhost`. When `Container`s in a `Pod` communicate with entities outside the
 `Pod`, they must coordinate how they use the shared network resources (such as

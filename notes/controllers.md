@@ -17,16 +17,16 @@ useful side effects.
 
 ## Control via API Server
 
-The `Job` `Controller` is an example of a Kubernetes built-in controller.
+The `Job Controller` is an example of a Kubernetes built-in controller.
 Built-in `Controller`s manage state by interacting with the cluster API server.
 `Job` is a Kubernetes resource that runs a `Pod`, or perhaps several `Pod`s, to
-carry out a task and then stop. When the `Job` `Controller` sees a new task it
+carry out a task and then stop. When the `Job Controller` sees a new task it
 makes sure that, somewhere in your cluster, the `kubelet`s on a set of `Nodes`
-are running the right number of `Pod`s to get the work done. The `Job`
-`Controller` does not run any `Pod`s or `Container`s itself. Instead, the `Job`
-`Controller` tells the API server to create or remove `Pod`s. Other components
-in the `Control Plane` act on the new information (there are new `Pod`s to
-schedule and run), and eventually the work is done.
+are running the right number of `Pod`s to get the work done. The
+`Job Controller` does not run any `Pod`s or `Container`s itself. Instead, the
+`Job Controller` tells the API server to create or remove `Pod`s. Other
+components in the `Control Plane` act on the new information (there are new
+`Pod`s to schedule and run), and eventually the work is done.
 
 ## Direct Control
 
