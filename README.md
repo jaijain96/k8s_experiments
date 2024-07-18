@@ -10,6 +10,7 @@
    3. [`Workload`s](notes/workloads.md)
       1. [`Pod`s](notes/pods.md)
          1. [`Pod` Lifecycle](notes/pod_lifecycle.md)
+         2. [Init `Container`s](notes/init_containers.md)
    4.
 
 ## To Understand Later
