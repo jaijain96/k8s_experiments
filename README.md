@@ -18,7 +18,7 @@
          7. [User `Namespace`s](notes/kubernetes-cluster-architecture/workloads/pods/user_namespaces.md)
          8. [Downward API](notes/kubernetes-cluster-architecture/workloads/pods/downward_api.md)
       2. [Workload Management](notes/kubernetes-cluster-architecture/workloads/workload-management/workload_management.md)
-         1.
+         1. [`Deployment`s](notes/kubernetes-cluster-architecture/workloads/workload-management/deployments.md)
    4.
 
 ## To Understand Later
