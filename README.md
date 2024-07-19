@@ -15,6 +15,7 @@
          4. [Ephemeral `Container`s](notes/kubernetes-cluster-architecture/workloads/pods/ephemeral_containers.md)
          5. [Disruptions](notes/kubernetes-cluster-architecture/workloads/pods/disruptions.md)
          6. [Pod Quality of Service Classes](notes/kubernetes-cluster-architecture/workloads/pods/pod_quality_of_service_classes.md)
+         7. [User `Namespace`s](notes/kubernetes-cluster-architecture/workloads/pods/user_namespaces.md)
    4.
 
 ## To Understand Later
