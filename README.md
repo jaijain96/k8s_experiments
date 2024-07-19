@@ -17,7 +17,9 @@
          6. [Pod Quality of Service Classes](notes/kubernetes-cluster-architecture/workloads/pods/pod_quality_of_service_classes.md)
          7. [User `Namespace`s](notes/kubernetes-cluster-architecture/workloads/pods/user_namespaces.md)
          8. [Downward API](notes/kubernetes-cluster-architecture/workloads/pods/downward_api.md)
-   4. 
+      2. [Workload Management](notes/kubernetes-cluster-architecture/workloads/workload-management/workload_management.md)
+         1.
+   4.
 
 ## To Understand Later
 
