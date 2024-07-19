@@ -2,17 +2,18 @@
 
 ## Notes
 
-1. [Objects in Kubernetes](notes/objects-in-kubernetes.md)
-2. [Kubernetes Components](notes/kubernetes-components.md)
-3. [Kubernetes Cluster Architecture](notes/kubernetes-cluster-architecture.md)
-   1. [`Node`s](notes/nodes.md)
-   2. [`Controller`s](notes/controllers.md)
-   3. [`Workload`s](notes/workloads.md)
-      1. [`Pod`s](notes/pods.md)
-         1. [`Pod` Lifecycle](notes/pod_lifecycle.md)
-         2. [Init `Container`s](notes/init_containers.md)
-         3. [Sidecar `Container`s](notes/sidecar_containers.md)
-         4. [Ephemeral `Container`s](notes/ephemeral_containers.md)
+1. [Objects in Kubernetes](notes/objects_in_kubernetes.md)
+2. [Kubernetes Components](notes/kubernetes_components.md)
+3. [Kubernetes Cluster Architecture](notes/kubernetes-cluster-architecture/kubernetes_cluster_architecture.md)
+   1. [`Node`s](notes/kubernetes-cluster-architecture/nodes.md)
+   2. [`Controller`s](notes/kubernetes-cluster-architecture/controllers.md)
+   3. [`Workload`s](notes/kubernetes-cluster-architecture/workloads/workloads.md)
+      1. [`Pod`s](notes/kubernetes-cluster-architecture/workloads/pods/pods.md)
+         1. [`Pod` Lifecycle](notes/kubernetes-cluster-architecture/workloads/pods/pod_lifecycle.md)
+         2. [Init `Container`s](notes/kubernetes-cluster-architecture/workloads/pods/init_containers.md)
+         3. [Sidecar `Container`s](notes/kubernetes-cluster-architecture/workloads/pods/sidecar_containers.md)
+         4. [Ephemeral `Container`s](notes/kubernetes-cluster-architecture/workloads/pods/ephemeral_containers.md)
+         5. [Disruptions](notes/kubernetes-cluster-architecture/workloads/pods/disruptions.md)
    4.
 
 ## To Understand Later
