@@ -12,6 +12,7 @@
          1. [`Pod` Lifecycle](notes/pod_lifecycle.md)
          2. [Init `Container`s](notes/init_containers.md)
          3. [Sidecar `Container`s](notes/sidecar_containers.md)
+         4. [Ephemeral `Container`s](notes/ephemeral_containers.md)
    4.
 
 ## To Understand Later
