@@ -19,6 +19,7 @@
          8. [Downward API](notes/kubernetes-cluster-architecture/workloads/pods/downward_api.md)
       2. [Workload Management](notes/kubernetes-cluster-architecture/workloads/workload-management/workload_management.md)
          1. [`Deployment`s](notes/kubernetes-cluster-architecture/workloads/workload-management/deployments.md)
+         2. [`ReplicaSet`](notes/kubernetes-cluster-architecture/workloads/workload-management/replicaset.md)
    4.
 
 ## To Understand Later
