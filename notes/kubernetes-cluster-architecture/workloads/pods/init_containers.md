@@ -9,10 +9,10 @@ started. Few differences between init `Container`s and regular `Containers`:
 - Init `Container`s always run to completion.
 - Each init `Container` must complete successfully before the next one starts.
 
-If a `Pod`'s init `Container` fails, the `kubelet` repeatedly restarts that
-init `Container` until it succeeds. However, if the `Pod` has a `restartPolicy`
-of `Never`, and an init `Container` fails during startup of that `Pod`, k8s
-treats the overall `Pod` as `Failed`.
+<mark>If a `Pod`'s init `Container` fails, the `kubelet` repeatedly restarts
+that init `Container` until it succeeds. However, if the `Pod` has a
+`restartPolicy` of `Never`, and an init `Container` fails during startup of that
+`Pod`, k8s treats the overall `Pod` as `Failed`.</mark>
 
 ## Detailed Behavior
 
@@ -26,17 +26,18 @@ failure, it is retried according to the `Pod` `restartPolicy`. However, if the
 `Pod` `restartPolicy` is set to `Always`, the init `Container`s use
 `restartPolicy` `OnFailure`.
 
-A `Pod` cannot be `Ready` until all init `Container`s have succeeded.
-<mark>The ports on an init `Container` are not aggregated under a
-`Service`.</mark> A `Pod` that is initializing is in the `Pending` state but should have a condition `Initialized` set to `False`.
+<mark>A `Pod` cannot be `Ready` until all init `Container`s have succeeded.
+</mark> The ports on an init `Container` are not aggregated under a
+`Service`. A `Pod` that is initializing is in the `Pending` state but should
+have a condition `Initialized` set to `False`.
 
-Changes to the init `Container` `spec` are limited to the container image
-field. Altering that field is equivalent to restarting the `Pod`.
+<mark>Changes to the init `Container` `spec` are limited to the container
+image field. Altering that field is equivalent to restarting the `Pod`.<mark>
 
-Because init `Container`s can be restarted, retried, or re-executed, init
-`Container` code should be idempotent. In particular, code that writes to files
-on `EmptyDirs` should be prepared for the possibility that an output file
-already exists.
+<mark>Because init `Container`s can be restarted, retried, or re-executed,
+init `Container` code should be idempotent.<mark> In particular, code that
+writes to files on `EmptyDirs` should be prepared for the possibility that
+an output file already exists.
 
 Init `Container`s do not support the `lifecycle`, `livenessProbe`,
 `readinessProbe`, or `startupProbe` fields whereas sidecar `Container`s support
@@ -62,10 +63,11 @@ would be killed by `activeDeadlineSeconds` if we set.
 - Init `Container`s can run with a different view of the filesystem than app
   `Container`s in the same `Pod`. Consequently, they can be given access to
   `Secret`s that app `Container`s cannot access.
-- Because init `Container`s run to completion before any app `Container`s
-  start, init `Container`s offer a mechanism to block or delay app `Container`
-  startup until a set of preconditions are met. Once preconditions are met, all
-  of the app `Container`s in a `Pod` can start in parallel.
+- <mark>Because init `Container`s run to completion before any app
+  `Container`s start, init `Container`s offer a mechanism to block or delay
+  app `Container` startup until a set of preconditions are met. Once
+  preconditions are met, all of the app `Container`s in a `Pod` can start in
+  parallel.</mark>
 - Init `Container`s can securely run utilities or custom code that would
   otherwise make an app `Container` image less secure. By keeping unnecessary
   tools separate you can limit the attack surface of your app `Container`

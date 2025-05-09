@@ -22,14 +22,14 @@ In either of the above cases:
 
 ## Node `name` uniqueness
 
-The `metadata.name` field uniquely identifies a `Node`. Kubernetes also assumes
-that a resource with the same `name` is the same object. In case of a `Node`,
-it is implicitly assumed that an instance using the same `name` will have the
-same state (e.g. network settings, root disk contents) and `attributes` like
-`Node` `Label`s. This may lead to inconsistencies if an instance was modified
-without changing its name. If the `Node` needs to be replaced or updated
-significantly, the existing `Node` object needs to be removed from API server
-first and re-added after the update.
+The `metadata.name` field uniquely identifies a `Node`. <mark>Kubernetes also
+assumes that a resource with the same `name` is the same object. In case of a
+`Node`, it is implicitly assumed that an instance using the same `name` will
+have the same state (e.g. network settings, root disk contents) and
+`attributes` like `Node` `Label`s. This may lead to inconsistencies if an
+instance was modified without changing its name. If the `Node` needs to be
+replaced or updated significantly, the existing `Node` object needs to be
+removed from API server first and re-added after the update.</mark>
 
 ## Node Status
 
@@ -50,7 +50,8 @@ The `Node Controller` is a Kubernetes `Control Plane` component that manages
 various aspects of `Node`s:
 
 1. Assigning a CIDR block to the `Node` when it is registered (if CIDR
-   assignment is turned on).
+   assignment is turned on).<mark>DOUBT: is this to allow individual containers
+   to have individual IPs?</mark>
 2. Keeping the `Node` `Controller`'s internal list of `Node`s up to date with
    the cloud provider's list of available machines. When running in a cloud
    environment and whenever a `Node` is unhealthy, the `Node` `Controller` asks
@@ -82,11 +83,26 @@ any processes running outside of the `kubelet`'s control.
 
 Kubernetes has a "hub-and-spoke" API pattern. All API usage from `Node`s
 (or the `Pod`s they run) terminates at the API server. None of the other
-`Control Plane` components are designed to expose remote services.
-**Doubt here: Does this mean that all communication always has to go through
-the API server, i.e, if 2 `Controller`s need to communicate, they have to do
-so via the API server and not directly between themselves, what about the
-controller and the `Container`s?**
+`Control Plane` components are designed to expose remote services.<br>
+<mark>DOUBT: Does this mean that all communication always has to go through
+the API server, i.e, if 2 `Container`s need to communicate, they have to do
+so via the API server and not directly between themselves? maybe they can
+communicate between themselves? maybe the `kube-proxy` helps here? maybe it
+means that different components like `kubelet`, `scheduler`, `etcd`, all don't
+talk to each other directly and communication goes via the `kube-api-server`?
+could there be a case where 2 `kubelet`s on 2 `Node`s could have talked to each
+other directly but because of the design, it has to go via the
+`kube-api-server`? for instance, say there is a `Service` spawned across 2
+`Nodes` as multiple `Pod`s on those `Node`s. If a `Container` now wants to
+talk to another `Container` of the same `Service`, and it so happens that it
+can't reach out to any `Container` of the same `Service` on the same `Node`,
+does the network packet has to go via the `kube-api-server` first then to the
+other `Pod` (on the other `Node`) of the same `Service`, or it is redirected
+directly to the other `Pod`? if the case is the former, isn't this loss of
+optimzation where the network packet could have gone directly to the other
+`Node`? or this is just a by product of the design which might not be optimized
+for this particular scenario, but works better in general?
+</mark>
 
 The `Node`s and the `Pod`s within those use TLS to communicate with the API
 server and as such, the default operating mode for connections from the
@@ -129,5 +145,7 @@ credentials. So while the connection will be encrypted, it will not provide any
 guarantees of integrity. These connections are not currently safe to run over
 untrusted or public networks.
 
-These connections can be made secure using [SSH Tunneling](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#ssh-tunnels)
-(deprecated) or via the [Konnectivity service](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#konnectivity-service), refer the official docs for more info.
+These connections can be made secure using
+[SSH Tunneling](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#ssh-tunnels)
+or via the (deprecated)
+[Konnectivity service](https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/#konnectivity-service), refer the official docs for more info.

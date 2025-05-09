@@ -83,6 +83,8 @@ service.
 - The resource `request` of a `Pod` is equal to the sum of the resource
   `request`s of its component `Container`s, and the resource `limit` of a `Pod`
   is equal to the sum of the resource `limit`s of its component `Container`s.
-- The `kube-scheduler` does not consider QoS class when selecting which `Pod`s
-  to [preempt](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#preemption). Preemption can occur when a cluster
-  does not have enough resources to run all the `Pod`s we defined.
+- The `kube-scheduler` does not consider QoS class when selecting which
+  `Pod`s to
+  [preempt](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#preemption).
+  Preemption can occur when a cluster does not have enough resources to run
+  all the `Pod`s we defined.

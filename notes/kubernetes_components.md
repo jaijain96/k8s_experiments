@@ -23,9 +23,11 @@ events (for example, starting up a new `Pod` when a `Deployment`'s `replicas`
 field is unsatisfied).
 
 `Control Plane` components can be run on any machine in the cluster and span
-multiple machines in the cluster. **Doubt here: is the `Control Plane` also
-running as a `Container`? Are their different components in the `Control Plane`
-that run on separate `Container`s deployed on various nodes in the cluster?**
+multiple machines in the cluster.<br>
+<mark>DOUBT: is the `Control Plane` also running as a `Container`, or a
+`Container` within a `Pod`, or simply as an application on host machine?
+Are the different components of the `Control Plane` running on separate
+`Container`s deployed on various nodes in the cluster?</mark>
 
 ### kube-apiserver
 
@@ -36,8 +38,8 @@ the Kubernetes API. The API server is the frontend for the Kubernetes
 The main implementation of a Kubernetes API server is `kube-apiserver`.
 `kube-apiserver` is designed to scale horizontally — that is, it scales by
 deploying more instances. We can run several instances of `kube-apiserver` and
-balance traffic between those instances. **Doubt here: Again, do the
-instances mentioned here mean containers?**
+balance traffic between those instances.<br>
+<mark>DOUBT: Do the instances mentioned here mean `Container`s?</mark>
 
 ### etcd
 
@@ -59,7 +61,9 @@ assigned `Node`, and selects a `Node` for them to run on.
 
 `Control Plane` component that runs `Controller` processes. Logically, each
 `Controller` is a separate process, but to reduce complexity, they are all
-compiled into a single binary and run in a single process.
+compiled into a single binary and run in a single process.<br>
+<mark>DOUBT: Does that single process mean a `Container`, a process running directly
+on machine? If needed, can they be run as separate processes/`Container`s?</mark>
 
 There are many different types of `Controller`s. Some examples of them are:
 
@@ -145,24 +149,36 @@ should have `Cluster DNS`, as many examples rely on it. `Cluster DNS` is a DNS
 server, in addition to the other DNS server(s) in your environment, which
 serves DNS records for Kubernetes services. `Container`s started by Kubernetes
 automatically include this DNS server in their DNS searches.
-**Doubt here: How is the `Cluster DNS` implemented? Is it also running as a
+
+<mark>DOUBT: How is the `Cluster DNS` implemented? Is it also running as a
 `Container` in a `Pod`? Are these deployed on various `Node`s in the
-cluster?**
+cluster?</mark>
+
+The above statement about addons probably throws some light on this:
+
+> Addons use Kubernetes resources (`DaemonSet`, `Deployment`, etc.) to
+> implement cluster features.
+
+Like other addons, `Cluster DNS` might not be implemented as a `Container`
+or a `Process`, it might just be a logical entity in code that uses other
+Kubernetes resources to provide DNS related features.
 
 ### Web UI (Dashboard)
 
 Dashboard is a web-based UI that allows users to manage and troubleshoot
 applications running in the cluster, as well as the cluster itself.
 
-### `Container` Resource Monitoring
+### `Container` Resource Monitoring (CRM)
 
 `Container` Resource Monitoring records generic time-series metrics about
-`Container`s in a central database, and provides a UI for browsing that data.
+`Container`s in a central database, and provides a UI for browsing that data.<br>
+<mark>DOUBT: Is that central database etcd?</mark>
 
 ### Cluster-level Logging
 
 A cluster-level logging mechanism is responsible for saving `Container` logs to
-a central log store with search/browsing interface.
+a central log store with search/browsing interface.<br>
+<mark>DOUBT: Again, is that central log store etcd?</mark>
 
 ### Network Plugins
 

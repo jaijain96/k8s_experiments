@@ -40,7 +40,7 @@ If we define a `Job` that uses sidecar using K8s-style init `Container`s, the
 sidecar `Container` in each `Pod` does not prevent the `Job` from completing
 after the main application/job `Container` has finished.
 
-Sidecar `Container`s have their own independent lifecycles. They can be
+<mark>Sidecar `Container`s have their own independent lifecycles. They can be
 started, stopped, and restarted independently of app `Container`s. This means
 we can update, scale, or maintain sidecar `Container`s without affecting the
 primary application. They share the same network and storage `Namespace`s with
@@ -48,4 +48,4 @@ the primary `Container` allowing them to interact closely and share resources.
 In contrast, regular init `Container`s stop before the main application
 `Container`s start up, so they can't exchange messages with the app
 `Container` in a `Pod`. Any data passing is one-way (for example, an init
-`Container` can put information inside an `emptyDir` volume).
+`Container` can put information inside an `emptyDir` volume).</mark>

@@ -86,7 +86,9 @@ more resource fields. Here are some examples of field selector queries:
 metadata.name=my-service
 metadata.namespace!=default
 status.phase=Pending
+```
 
+```bash
 kubectl get pods --field-selector status.phase=Running
 ```
 
@@ -103,7 +105,7 @@ kubectl get services  --all-namespaces --field-selector metadata.namespace!=defa
 Set-based operators (`in`, `notin`, `exists`) are not supported for
 `Field Selector`s.
 
-**Doubt here: where to use `Label`s, where to use `Annotation`s and where to
+**DOUBT: where to use `Label`s, where to use `Annotation`s and where to
 use `Field Selector`s.**
 
 ## [Finalizers](https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers/)

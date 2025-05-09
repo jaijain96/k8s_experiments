@@ -1,11 +1,12 @@
 # [`Deployment`s](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 
-A `Deployment` provides declarative updates for `Pod`s and `ReplicaSet`s. We
-describe a desired state in a `Deployment`, and the `Deployment` `Controller`
-changes the actual state to the desired state at a controlled rate. We can
-define `Deployment`s to create new `ReplicaSet`s, or to remove existing
-`Deployment`s and adopt all their resources with new `Deployment`s. It isn't
-advisable to manually manage `ReplicaSet`s owned by a `Deployment`.
+A `Deployment` provides declarative updates for `Pod`s and `ReplicaSet`s.
+<mark>We describe a desired state in a `Deployment`, and the `Deployment`
+`Controller` changes the actual state to the desired state at a controlled
+rate. We can define `Deployment`s to create new `ReplicaSet`s, or to remove
+existing `Deployment`s and adopt all their resources with new `Deployment`s.
+It isn't advisable to manually manage `ReplicaSet`s owned by a
+`Deployment`.</mark>
 
 ## Use Cases
 
@@ -29,24 +30,25 @@ The following are typical use cases for `Deployment`s:
 
 ## Writing a `Deployment` `Spec`
 
-As with all other K8s configs, a `Deployment` needs `.apiVersion`, `.kind`, and
-`.metadata` fields. When the `Control Plane` creates new `Pod`s for a
-`Deployment`, the `.metadata.name` of the `Deployment` is part of the basis for
-naming those `Pod`s. The name of a `Deployment` must be a valid DNS subdomain
-value, but this can produce unexpected results for the `Pod` hostnames. For
-best compatibility, the name should follow the more restrictive rules for a DNS
-label. A `Deployment` also needs a `.spec` section.
+<mark>As with all other K8s configs, a `Deployment` needs `.apiVersion`,
+`.kind`, and `.metadata` fields.</mark> When the `Control Plane` creates new
+`Pod`s for a `Deployment`, the `.metadata.name` of the `Deployment` is part
+of the basis for naming those `Pod`s. The name of a `Deployment` must be a
+valid DNS subdomain value, but this can produce unexpected results for the
+`Pod` hostnames. For best compatibility, the name should follow the more
+restrictive rules for a DNS label. A `Deployment` also needs a `.spec`
+section.
 
 ### `Pod` Template
 
 The `.spec.template` and `.spec.selector` are the only required fields of the
 `.spec`.
 
-The `.spec.template` is a `Pod` template. It has exactly the same schema as a
-`Pod`, except it is nested and does not have an `apiVersion` or `kind`. In
-addition to required fields for a `Pod`, a `Pod` template in a `Deployment`
-must specify appropriate `Label`s and an appropriate `restartPolicy`. `Label`s
-shouln't overlap with other `Controller`s.
+<mark>The `.spec.template` is a `Pod` template. It has exactly the same
+schema as a `Pod`, except it is nested and does not have an `apiVersion` or
+`kind`. In addition to required fields for a `Pod`, a `Pod` template in a
+`Deployment` must specify appropriate `Label`s and an appropriate
+`restartPolicy`. `Label`s shouln't overlap with other `Controller`s.</mark>
 
 Only a `.spec.template.spec.restartPolicy` equal to `Always` is allowed, which
 is the default if not specified.
@@ -61,23 +63,25 @@ for horizontal scaling) is managing scaling for a `Deployment`, we don't set
 
 ### Selector
 
-`.spec.selector` is a required field that specifies a `Label` selector for the
-`Pod`s targeted by this `Deployment`. `.spec.selector` must match
-`.spec.template.metadata.labels`, or it will be rejected by the API. In API
-version `apps/v1`, `.spec.selector` and `.metadata.labels` do not default to
-`.spec.template.metadata.labels` if not set and must be set explicitly. Note
-that `.spec.selector` is immutable after creation of the `Deployment` in
-`apps/v1`.
+<mark>`.spec.selector` is a required field that specifies a `Label` selector
+for the `Pod`s targeted by this `Deployment`. `.spec.selector` must match
+`.spec.template.metadata.labels`, or it will be rejected by the API.</mark>
+In API version `apps/v1`, `.spec.selector` and `.metadata.labels` do not
+default to `.spec.template.metadata.labels` if not set and must be set
+explicitly. Note that `.spec.selector` is immutable after creation of the
+`Deployment` in `apps/v1`.
 
-A `Deployment` may terminate `Pod`s whose `Label`s match the selector if their
-template is different from `.spec.template` or if the total number of such
-`Pod`s exceeds `.spec.replicas`. It brings up new `Pod`s with `.spec.template`
-if the number of `Pod`s is less than the desired number. We shouldn't create
-other `Pod`s whose `Label`s match this selector, either directly, by creating
-another `Deployment`, or by creating another `Controller` such as a
-`ReplicaSet` or a `ReplicationController`. If we do so, the first `Deployment`
-thinks that it created these other `Pod`s. K8s does not stop us from doing this.
-Similarly, if we have multiple `Controller`s that have overlapping selectors, the `Controller`s will fight with each other and won't behave correctly.
+<mark>A `Deployment` may terminate `Pod`s whose `Label`s match the selector
+if their template is different from `.spec.template` or if the total number
+of such `Pod`s exceeds `.spec.replicas`. It brings up new `Pod`s with
+`.spec.template` if the number of `Pod`s is less than the desired number. We
+shouldn't create other `Pod`s whose `Label`s match this selector, either
+directly, by creating another `Deployment`, or by creating another
+`Controller` such as a `ReplicaSet` or a `ReplicationController`. If we do
+so, the first `Deployment` thinks that it created these other `Pod`s. K8s
+does not stop us from doing this. Similarly, if we have multiple
+`Controller`s that have overlapping selectors, the `Controller`s will fight
+with each other and won't behave correctly.</mark>
 
 ### Strategy
 
@@ -138,7 +142,8 @@ desired `Pod`s.
 of seconds for which a newly created `Pod` should be ready without any of its
 `Container`s crashing, for it to be considered available. This defaults to 0
 (the `Pod` will be considered available as soon as it is ready). `Pod`
-readiness has already been discussed in the [`Pod` lifecycle document](../pods/pod_lifecycle.md).
+readiness has already been discussed in the
+[`Pod` lifecycle document](../pods/pod_lifecycle.md).
 
 ### Progress Deadline Seconds
 

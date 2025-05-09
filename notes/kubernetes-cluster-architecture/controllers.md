@@ -22,11 +22,11 @@ Built-in `Controller`s manage state by interacting with the cluster API server.
 `Job` is a Kubernetes resource that runs a `Pod`, or perhaps several `Pod`s, to
 carry out a task and then stop. When the `Job Controller` sees a new task it
 makes sure that, somewhere in your cluster, the `kubelet`s on a set of `Nodes`
-are running the right number of `Pod`s to get the work done. The
+are running the right number of `Pod`s to get the work done. <mark>The
 `Job Controller` does not run any `Pod`s or `Container`s itself. Instead, the
 `Job Controller` tells the API server to create or remove `Pod`s. Other
 components in the `Control Plane` act on the new information (there are new
-`Pod`s to schedule and run), and eventually the work is done.
+`Pod`s to schedule and run), and eventually the work is done.</mark>
 
 ## Direct Control
 
@@ -40,19 +40,30 @@ directly with an external system to bring the current state closer in line.
 ## Design
 
 Kubernetes uses lots of `Controller`s that each manage a particular aspect of
-cluster state. A particular `Controller` uses one kind of resource as its
+cluster state. <mark>A particular `Controller` uses one kind of resource as its
 desired state, and has a different kind of resource that it manages to make
 that desired state happen. For example, a `Controller` for `Job`s tracks `Job`
 objects (to discover new work) and `Pod` objects (to run the `Job`s, and then
 to see when the work is finished). In this case something else creates the
-`Job`s, whereas the `Job` controller creates `Pod`s.
+`Job`s, whereas the `Job` controller creates `Pod`s.</mark>
 
-It's useful to have simple `Controller`s rather than one, monolithic set of
+<mark>It's useful to have simple `Controller`s rather than one, monolithic set of
 control loops that are interlinked. `Controller`s can fail, so Kubernetes is
-designed to allow for that.
+designed to allow for that.</mark>
 
 ## Ways of running `Controller`s
 
 Kubernetes comes with a set of built-in `Controller`s that run inside the
 `kube-controller-manager`. These built-in `Controller`s provide important core
 behaviors.
+
+The `Deployment` `Controller` and `Job` `Controller` are examples of
+`Controller`s that come as part of Kubernetes itself ("built-in" controllers).
+Kubernetes lets you run a resilient `Control Plane`, so that if any of the
+built-in `Controller`s were to fail, another part of the `Control Plane`
+will take over the work.
+
+You can find `Controller`s that run outside the `Control Plane`, to extend
+Kubernetes. You can also write a new `Controller` yourself. You can run your
+own `Controller` as a set of `Pod`s, or externally to Kubernetes. What fits
+best will depend on what that particular `Controller` does.

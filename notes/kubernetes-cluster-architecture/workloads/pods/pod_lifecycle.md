@@ -24,12 +24,14 @@ object consists of a set of `Pod` conditions. We can also inject custom
 readiness information into the condition data for a `Pod`, if that is useful to
 our application.
 
-`Pod`s are only scheduled once in their lifetime; assigning a `Pod` to a
-specific `Node` is called *binding*, and the process of selecting which `Node` to use is called *scheduling*. Once a `Pod` has been scheduled and is bound to
-a `Node`, Kubernetes tries to run that `Pod` on the `Node`. The `Pod` runs on
-that `Node` until it stops, or until the `Pod` is terminated; if Kubernetes
-isn't able start the `Pod` on the selected `Node` (for example, if the `Node`
-crashes before the `Pod` starts), then that particular `Pod` never starts.
+<mark>`Pod`s are only scheduled once in their lifetime; the process of
+selecting which `Node` to use is called *scheduling*, and assigning a `Pod`
+to a specific `Node` is called *binding*. Once a `Pod` has been scheduled and
+is bound to a `Node`, Kubernetes tries to run that `Pod` on THAT `Node`. The
+`Pod` runs on that `Node` until it stops, or until the `Pod` is terminated;
+if Kubernetes isn't able start the `Pod` on the selected `Node` (for example,
+if the `Node` crashes before the `Pod` starts), then that particular `Pod`
+never starts.</mark>
 
 ### `Pod`s and Fault Recovery
 
@@ -37,21 +39,22 @@ If one of the `Container`s in the `Pod` fails, then Kubernetes may try to
 restart that specific `Container`. `Pod`s can however fail in a way that the
 cluster cannot recover from, and in that case Kubernetes does not attempt to
 heal the `Pod` further; instead, Kubernetes deletes the `Pod` and relies on
-other components to provide automatic healing.
+other components to provide automatic healing.<br>
+<mark>DOUBT: examples of scenarios of this automatic healing?</mark>
 
 If a `Pod` is scheduled to a `Node` and that `Node` then fails, the `Pod` is
 treated as unhealthy and Kubernetes eventually deletes the `Pod`. A `Pod` won't
 survive an eviction due to a lack of resources or `Node` maintenance.
-Kubernetes uses a higher-level abstraction, called a `Controller`, that handles
-the work of managing the relatively disposable `Pod` instances.
+Kubernetes uses `Controller`s to manage the relatively disposable `Pod`
+instances.
 
-A given `Pod` (as defined by a UID) is never "rescheduled" to a different
-`Node`; instead, that `Pod` can be replaced by a new, near-identical `Pod`. If
-we make a replacement `Pod`, it can even have same name (as in
-`.metadata.name`) that the old `Pod` had, but the replacement would have a
-different `.metadata.uid` from the old `Pod`. Kubernetes does not guarantee
-that a replacement for an existing `Pod` would be scheduled to the same `Node`
-as the old `Pod` that was being replaced.
+<mark>A given `Pod` (as defined by a UID) is never "rescheduled" to a
+different `Node`; instead, that `Pod` can be replaced by a new,
+near-identical `Pod`. If we make a replacement `Pod`, it can even have the
+same name (`.metadata.name`) that the old `Pod` had, but the replacement
+would have a different `.metadata.uid` from the old `Pod`. Kubernetes
+doesn't guarantee that a replacement for an existing `Pod` would be
+scheduled to the same `Node` as the old `Pod` that was being replaced.</mark>
 
 ### Associated Lifetimes
 
@@ -65,12 +68,13 @@ example) is also destroyed and created anew.
 
 A `Pod`'s `status` field is a `PodStatus` object, which has a `phase` field.
 
-The `phase` of a `Pod` is a simple, high-level summary of where the `Pod` is in
+<mark>The `phase` of a `Pod` is a simple, high-level summary of where the `Pod` is in
 its lifecycle. The `phase` is not intended to be a comprehensive rollup of
 observations of `Container` or `Pod` state, nor is it intended to be a
-comprehensive state machine. **The number and meanings of `Pod` `phase` values
-are tightly guarded**. Other than what is documented [here](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase), nothing should be
-assumed about `Pod`s that have a given `phase` value.
+comprehensive state machine. The number and meanings of `Pod` `phase` values
+are tightly guarded. Other than what is documented
+[here](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase),
+nothing should be assumed about `Pod`s that have a given `phase` value.</mark>
 
 If a `Node` dies or is disconnected from the rest of the cluster, Kubernetes
 applies a policy for setting the `phase` of all `Pod`s on the lost `Node` to
@@ -78,12 +82,12 @@ applies a policy for setting the `phase` of all `Pod`s on the lost `Node` to
 
 ## `Container` States
 
-As well as the `phase` of the `Pod` overall, Kubernetes tracks the `state` of
-each `Container` inside a `Pod`. Once the `scheduler` assigns a `Pod` to a
-`Node`, the `kubelet` starts creating `Container`s for that `Pod` using a
-`Container` runtime. There are three possible `Container` `state`s: `Waiting`,
-`Running`, and `Terminated`. To check the state of a `Pod`'s `Container`s, you
-can use:
+<mark>As well as the `phase` of the `Pod` overall, Kubernetes tracks the
+`state` of each `Container` inside a `Pod`.</mark> Once the `scheduler`
+assigns a `Pod` to a `Node`, the `kubelet` starts creating `Container`s for
+that `Pod` using a `Container` runtime. There are three possible `Container`
+`state`s: `Waiting`, `Running`, and `Terminated`. To check the state of a
+`Pod`'s `Container`s, you can use:
 
 ```bash
 kubectl describe pod <name-of-pod>
@@ -94,7 +98,7 @@ The output shows the `state` for each `Container` within that `Pod`. Each
 
 1. `Waiting`: A `Container` in the `Waiting` `state` is still running the
    operations it requires in order to complete start up: for example, pulling
-   the `Container` image from a `Container` image registry, or applying Secret
+   the `Container` image from a `Container` image registry, or applying `Secret`
    data.
 2. `Running`: The `Running` status indicates that a `Container` is executing
    without issues.
@@ -103,9 +107,9 @@ The output shows the `state` for each `Container` within that `Pod`. Each
 
 ## How `Pod`s Handle Problems with `Container`s
 
-Kubernetes manages `Container` failures within `Pod`s using a `restartPolicy`
+<mark>Kubernetes manages `Container` failures within `Pod`s using a `restartPolicy`
 defined in the `Pod` `spec`. This policy determines how Kubernetes reacts to
-`Container`s exiting due to errors or other reasons, which falls in the
+`Container`s exiting due to errors or other reasons</mark>, which falls in the
 following sequence:
 
 1. Initial crash: Kubernetes attempts an immediate restart based on the `Pod`
@@ -134,13 +138,14 @@ that has its `Container`-level `restartPolicy` set to `Always`.
   (non-zero exit status).
 - `Never`: Does not automatically restart the terminated `Container`.
 
-When the `kubelet` is handling `Container` restarts according to the
-configured `restartPolicy`, that **only applies to restarts that make
-replacement `Container`s inside the same `Pod` and running on the same
-`Node`**. After `Container`s in a `Pod` exit, the `kubelet` restarts them with
-an exponential backoff delay (10s, 20s, 40s, …), that is capped at 300 seconds
-(5 minutes). Once a `Container` has executed for 10 minutes without any
-problems, the `kubelet` resets the restart backoff timer for that `Container`.
+<mark>When the `kubelet` is handling `Container` restarts according to the
+configured `restartPolicy`, that only applies to restarts that make
+replacement `Container`s inside the SAME `Pod` and running on the SAME
+`Node`.</mark> After `Container`s in a `Pod` exit, the `kubelet` restarts
+them with an exponential backoff delay (10s, 20s, 40s, …), that is capped at
+300 seconds (5 minutes). Once a `Container` has executed for 10 minutes
+without any problems, the `kubelet` resets the restart backoff timer for that
+`Container`.
 
 ## `Pod` Conditions
 
@@ -172,10 +177,11 @@ to `False`.
 
 The `kubectl` `patch` command does not support patching object status. To set
 these `status.conditions` for the `Pod`, applications and operators should use
-the `PATCH` action. You can use a [Kubernetes client library](https://kubernetes.io/docs/reference/using-api/client-libraries/) to write code that
-sets custom `Pod` conditions for `Pod` readiness. For a `Pod` that uses custom
-conditions, that `Pod` is evaluated to be ready only when both the following
-statements apply:
+the `PATCH` action. You can use a
+[Kubernetes client library](https://kubernetes.io/docs/reference/using-api/client-libraries/)
+to write code that sets custom `Pod` conditions for `Pod` readiness. For a
+`Pod` that uses custom conditions, that `Pod` is evaluated to be ready only
+when both the following statements apply:
 
 - All `Container`s in the `Pod` are ready.
 - All conditions specified in `readinessGates` are `True`.
@@ -222,9 +228,9 @@ configuration starts.
 
 ## `Container` Probes
 
-A `probe` is a diagnostic performed periodically by the `kubelet` on a
+<mark>A `probe` is a diagnostic performed periodically by the `kubelet` on a
 `Container`. To perform a diagnostic, the `kubelet` either executes code within
-the `Container`, or makes a network request.
+the `Container`, or makes a network request.</mark>
 
 ### Check Mechanisms
 
@@ -258,9 +264,9 @@ The `kubelet` can optionally perform and react to three kinds of `Probe`s on
 running `Container`s:
 
 - `livenessProbe`: Indicates whether the `Container` is running. If the
-  `liveness` `Probe` fails, the `kubelet` kills the `Container`, and is
+  `livenessProbe` fails, the `kubelet` kills the `Container`, and is
   subjected to its `restartPolicy`. If a `Container` does not provide a
-  `liveness` `Probe`, the default state is `Success`.
+  `livenessProbe`, the default state is `Success`.
 - `readinessProbe`: Indicates whether the `Container` is ready to respond to
   requests. If the `readinessProbe` fails, the endpoints controller removes the
   `Pod`'s IP address from the endpoints of all `Service`s that match the `Pod`.
@@ -268,8 +274,8 @@ running `Container`s:
   `Container` does not provide a `readinessProbe`, the default state is
   `Success`.
 - `startupProbe`: Indicates whether the application within the `Container` is
-  started. All other `Probe`s are disabled if a startup `Probe` is provided,
-  until it succeeds. If the startup `Probe` fails, the `kubelet` kills the
+  started. All other `Probe`s are disabled if a `startupProbe` is provided,
+  until it succeeds. If the `startupProbe` fails, the `kubelet` kills the
   `Container`, and the `Container` is subjected to its `restartPolicy`. If a
   `Container` does not provide a `startupProbe`, the default state is
   `Success`.
@@ -295,11 +301,11 @@ If we want our `Container` to be able to take itself down for maintenance, we
 can specify a `readinessProbe` that checks an endpoint specific to readiness
 that is different from the `livenessProbe`.
 
-If our app has a strict dependency on back-end services, we can implement both
+<mark>If our app has a strict dependency on back-end services, we can implement both
 a `livenessProbe` and a `readinessProbe`. The `livenessProbe` passes when the
 app itself is healthy, but the `readinessProbe` additionally checks that each
 required back-end service is available. This helps avoid directing traffic to
-`Pod`s that can only respond with error messages.
+`Pod`s that can only respond with error messages.</mark>
 
 If we want to be able to drain requests when the `Pod` is deleted, we don't
 necessarily need a `readinessProbe`; on deletion, the `Pod` automatically puts
@@ -309,12 +315,13 @@ the `Pod` to stop.
 
 **When to use `startupProbe`?**
 
-Startup `Probe`s are useful for `Pod`s that have `Container`s that take a long
-time to come into service. Rather than set a long liveness interval, we can
-configure a separate configuration for probing the `Container` as it starts up,
-allowing a time longer than the liveness interval would allow. If our
-`Container` needs to work on loading large data, configuration files, or
-migrations during startup, we can use a `startupProbe`.
+<mark>Startup `Probe`s are useful for `Pod`s that have `Container`s that
+take a long time to come into service. Rather than set a long liveness
+interval, we can configure a separate configuration for probing the
+`Container` as it starts up, allowing a time longer than the liveness
+interval would allow. If our `Container` needs to work on loading large
+data, configuration files, or migrations during startup, we can use a
+`startupProbe`.</mark>
 
 If our `Container` usually starts in more than
 `initialDelaySeconds + failureThreshold × periodSeconds`, we should specify a
@@ -327,16 +334,17 @@ values of the `livenessProbe`. This helps to protect against deadlocks.
 
 K8s design aim is for the user to be able to request deletion and know when
 processes terminate, but also be able to ensure that deletes eventually
-complete. When we request deletion of a `Pod`, the cluster records and tracks
-the intended grace period before the `Pod` is allowed to be forcefully killed.
-With that forceful shutdown tracking in place, the `kubelet` attempts graceful
-shutdown. The requests to stop the `Container`s are processed by the
-`Container` runtime asynchronously, i.e, there is no guarantee to the order of
-processing for these requests. Once the grace period has expired, the `KILL`
-signal is sent to any remaining processes, and the `Pod` is then deleted from
-the API Server. If the `kubelet` or the `Container` runtime's management
-service is restarted while waiting for processes to terminate, the cluster
-retries from the start including the full original grace period.
+complete. <mark>When we request deletion of a `Pod`, the cluster records and
+tracks the intended grace period before the `Pod` is allowed to be
+forcefully killed. With that forceful shutdown tracking in place, the
+`kubelet` attempts graceful shutdown. The requests to stop the `Container`s
+are processed by the `Container` runtime asynchronously, i.e, there is no
+guarantee to the order of processing for these requests. Once the grace
+period has expired, the `KILL` signal is sent to any remaining processes,
+and the `Pod` is then deleted from the API Server. If the `kubelet` or the
+`Container` runtime's management service is restarted while waiting for
+processes to terminate, the cluster retries from the start including the
+full original grace period.</mark>
 
 `Pod` termination flow:
 
@@ -364,18 +372,18 @@ retries from the start including the full original grace period.
       `Pod` receive the `TERM` signal at different times and in an arbitrary
       order. If the order of shutdowns matters, we can use a `preStop` hook to
       synchronize (or switch to using sidecar `Container`s).
-3. At the same time as the `kubelet` is starting graceful shutdown of the
+3. <mark>At the same time as the `kubelet` is starting graceful shutdown of the
    `Pod`, the `Control Plane` evaluates whether to remove that shutting-down
    `Pod` from `EndpointSlice` (and `Endpoints`) objects, where those objects
    represent a `Service` with a configured selector. `ReplicaSets` and other
    workload resources no longer treat the shutting-down `Pod` as a valid,
-   in-service replica.
+   in-service replica.</mark>
 
-   Any `Endpoints` that represent the `Terminating` `Pod`s are not immediately
+   <mark>Any `Endpoints` that represent the `Terminating` `Pod`s are not immediately
    removed from `EndpointSlices`, and a status indicating `Terminating` state
    is exposed from the `EndpointSlice` API (and the legacy `Endpoints` API).
    `Terminating` `Endpoints` always have their ready status as `false`, so
-   load balancers will not use it for regular traffic.
+   load balancers will not use it for regular traffic.</mark>
 4. The `kubelet` ensures the `Pod` is shut down and terminated:
    1. When the grace period expires, if there is still any `Container` running
       in the `Pod`, the `kubelet` triggers forcible shutdown. The `Container`
@@ -396,25 +404,26 @@ command supports the `--grace-period=<seconds>` option which allows us to
 override the default and specify our own value. Setting the grace period to 0
 forcibly immediately deletes the `Pod` from the API server. If the `Pod` was
 still running on a `Node`, that forcible deletion triggers the `kubelet` to
-begin immediate cleanup. Using `kubectl`, we must specify an additional flag
-`--force` along with `--grace-period=0` in order to perform force deletions.
+begin immediate cleanup. <mark>Using `kubectl`, we must specify an additional
+flag `--force` along with `--grace-period=0` in order to perform force
+deletions.</mark>
 
-When a force deletion is performed, the API server does not wait for
+<mark>When a force deletion is performed, the API server does not wait for
 confirmation from the `kubelet` that the `Pod` has been terminated on the
 `Node` it was running on. It removes the `Pod` in the API immediately so a new
 `Pod` can be created with the same name. On the `Node`, `Pod`s that are set to
 terminate immediately will still be given a small grace period before being
-force killed.
+force killed.</mark>
 
 ### `Pod` Shutdown and Sidecar `Container`s
 
-If our `Pod` includes one or more sidecar `Container`s (init containers with
+<mark>If our `Pod` includes one or more sidecar `Container`s (init containers with
 an `Always` `restartPolicy`), the `kubelet` will delay sending the `TERM`
 signal to these sidecar `Container`s until the last main `Container` has fully
 terminated. The sidecar `Container`s will be terminated in the reverse order
 they are defined in the `Pod` `spec`. This ensures that sidecar `Container`s
 continue serving the other `Container`s in the `Pod` until they are no longer
-needed.
+needed.</mark>
 
 This means that slow termination of a main `Container` will also delay the
 termination of the sidecar `Container`s. If the grace period expires before the
@@ -425,12 +434,12 @@ simultaneously with a short grace period.
 ### Garbage Collection of `Pod`s
 
 <mark>For `Failed` `Pod`s, the API objects remain in the cluster's API until a
-human or controller process explicitly removes them.</mark> The `Pod` garbage
-collector (`PodGC`) is a `Controller` in the `Control Plane`, cleans up
-terminated `Pod`s (with a phase of `Succeeded` or `Failed`), when the number of
-`Pod`s exceeds the configured threshold (determined by
-`terminated-pod-gc-threshold` in the `kube-controller-manager`). This avoids a
-resource leak as `Pod`s are created and terminated over time.
+human or controller process explicitly removes them. The `Pod` garbage
+collector (`PodGC`) is a `Controller` in the `Control Plane`, that cleans up
+terminated `Pod`s (with a phase of `Succeeded` or `Failed`), when the number
+of `Pod`s exceeds the configured threshold (determined by
+`terminated-pod-gc-threshold` in the `kube-controller-manager`). This avoids
+a resource leak as `Pod`s are created and terminated over time.</mark>
 
 Additionally, `PodGC` cleans up any `Pod`s which satisfy any of the following
 conditions:
@@ -443,4 +452,5 @@ conditions:
 
 When the `PodDisruptionConditions` feature gate is enabled, `PodGC` will also
 mark them as failed if they are in a non-terminal `phase`. Also, `PodGC` adds a
-[`Pod` disruption condition](https://kubernetes.io/docs/concepts/workloads/pods/disruptions#pod-disruption-conditions) when cleaning up an orphan `Pod`.
+[`Pod` disruption condition](https://kubernetes.io/docs/concepts/workloads/pods/disruptions#pod-disruption-conditions)
+when cleaning up an orphan `Pod`.
